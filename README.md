@@ -102,7 +102,10 @@ $ ninja -C out/Release chrome -> Release build.
   ```
 ### Launch Chromium
 You might need to export EGL_PLATFORM=drm. I needed this as Mesa used to default to X11 otherwise, causing crashes during initialization.
-Set LD_LIBRARY_PATH to point to your local install. i.e. LD_LIRARY_PATH=$WLD/lib
+
+Set LD_LIBRARY_PATH to point to your local install. i.e. LD_LIRARY_PATH=$WLD/lib. Open any VT(i.e. Ctrl + Alt + F1)
  ```
-$ out/Debug chrome --disable-sandbox --ozone-platform=gbm --ozone-use-surfaceless
+$ out/Debug chrome --disable-sandbox --ozone-platform=gbm --ozone-use-surfaceless --ash-host-window-bounds=w*h
+  w = Width of your display.
+  h = Height of your display.
   ```
