@@ -1,0 +1,44 @@
+From 8be7902fbf3097cbb7ca5e031f92a33ee4393157 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>
+Date: Tue, 27 May 2014 18:39:20 -0700
+Subject: [PATCH 03/13] mesa: Remove bad ivb vs workaround
+
+This workaround seems to cause GPU hangs on link while playing videos.
+Since there is no evidence that it fixes anything (and actually breaks
+things for us), let's just remove it.
+
+This is basically a partial revert of:
+commit 709f50928e1d4df755ffb90ec9f33ba6c9605a32
+Author: Kenneth Graunke <kenneth@whitecape.org>
+Date:   Thu Jan 19 09:55:34 2012 -0800
+
+i965: Emit Ivybridge VS workaround flushes.
+
+BUG=chromium:328929,chromium:333130
+TEST=play youtube + vimeo + webgl demo together for ~4 hours with no crash (see bug for details)
+
+Change-Id: I4cc8c4691d2de25b72ce6657ebbffae61d41957c
+
+Conflicts:
+
+	src/mesa/drivers/dri/i965/gen7_vs_state.c
+---
+ src/mesa/drivers/dri/i965/gen7_vs_state.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/mesa/drivers/dri/i965/gen7_vs_state.c b/src/mesa/drivers/dri/i965/gen7_vs_state.c
+index 7534de2..f9a94e4 100644
+--- a/src/mesa/drivers/dri/i965/gen7_vs_state.c
++++ b/src/mesa/drivers/dri/i965/gen7_vs_state.c
+@@ -72,9 +72,6 @@ upload_vs_state(struct brw_context *brw)
+    const int max_threads_shift = brw->is_haswell ?
+       HSW_VS_MAX_THREADS_SHIFT : GEN6_VS_MAX_THREADS_SHIFT;
+
+-   if (!brw->is_haswell && !brw->is_baytrail)
+-      gen7_emit_vs_workaround_flush(brw);
+-
+    /* Use ALT floating point mode for ARB vertex programs, because they
+     * require 0^0 == 1.
+     */
+--
+1.9.1

@@ -1,0 +1,37 @@
+From 98065b3fee8757600a56e68cbfd958e8fa9387a0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tapani=20P=C3=A4lli?= <tapani.palli@intel.com>
+Date: Mon, 9 Jun 2014 20:12:44 -0700
+Subject: [PATCH 09/13] i965: initialize brw_reg struct when generating code
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Commit 07af0ab changed fs_inst to have 0 sources for SHADER_OPCODE_TEX
+for gen <7 (Ironlake, SNB), while fs_generator uses a single source
+from brw_reg struct, patch initializes the structure.
+
+Change-Id: I7fff64cdaa57b4f5e7795e01b60a648ba7754647
+Signed-off-by: Tapani Pälli <tapani.palli@intel.com>
+Bugzilla: https://bugs.freedesktop.org/show_bug.cgi?id=79534
+
+Conflicts:
+	src/mesa/drivers/dri/i965/brw_fs_generator.cpp
+---
+ src/mesa/drivers/dri/i965/brw_fs_generator.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/mesa/drivers/dri/i965/brw_fs_generator.cpp b/src/mesa/drivers/dri/i965/brw_fs_generator.cpp
+index ab5d223..a9337e0 100644
+--- a/src/mesa/drivers/dri/i965/brw_fs_generator.cpp
++++ b/src/mesa/drivers/dri/i965/brw_fs_generator.cpp
+@@ -1542,7 +1542,7 @@ fs_generator::generate_code(const cfg_t *cfg, int dispatch_width)
+    memset(&annotation, 0, sizeof(annotation));
+
+    foreach_block_and_inst (block, fs_inst, inst, cfg) {
+-      struct brw_reg src[3], dst;
++      struct brw_reg src[3] = {}, dst;
+       unsigned int last_insn_offset = p->next_insn_offset;
+
+       if (unlikely(debug_flag))
+--
+1.9.1

@@ -1,0 +1,45 @@
+From 0bf65d0815c5c8d38c882d4109178d08bc40764d Mon Sep 17 00:00:00 2001
+From: Jordan Justen <jordan.l.justen@intel.com>
+Date: Fri, 19 Dec 2014 01:09:57 -0800
+Subject: [PATCH 12/13] Revert "i965: Delete CACHE_NEW_BLORP_CONST_COLOR_PROG."
+
+This reverts commit fbebd5e4a5ccb44ae005a8be18c85ea45c66307f.
+---
+ src/mesa/drivers/dri/i965/brw_context.h      | 2 ++
+ src/mesa/drivers/dri/i965/brw_state_upload.c | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/src/mesa/drivers/dri/i965/brw_context.h b/src/mesa/drivers/dri/i965/brw_context.h
+index 656cbe8..c4edf67 100644
+--- a/src/mesa/drivers/dri/i965/brw_context.h
++++ b/src/mesa/drivers/dri/i965/brw_context.h
+@@ -687,6 +687,7 @@ enum brw_cache_id {
+    BRW_CC_UNIT,
+    BRW_WM_PROG,
+    BRW_BLORP_BLIT_PROG,
++   BRW_BLORP_CONST_COLOR_PROG,
+    BRW_SAMPLER,
+    BRW_WM_UNIT,
+    BRW_SF_PROG,
+@@ -781,6 +782,7 @@ enum shader_time_shader_type {
+ #define CACHE_NEW_CC_UNIT                (1<<BRW_CC_UNIT)
+ #define CACHE_NEW_WM_PROG                (1<<BRW_WM_PROG)
+ #define CACHE_NEW_BLORP_BLIT_PROG        (1<<BRW_BLORP_BLIT_PROG)
++#define CACHE_NEW_BLORP_CONST_COLOR_PROG (1<<BRW_BLORP_CONST_COLOR_PROG)
+ #define CACHE_NEW_SAMPLER                (1<<BRW_SAMPLER)
+ #define CACHE_NEW_WM_UNIT                (1<<BRW_WM_UNIT)
+ #define CACHE_NEW_SF_PROG                (1<<BRW_SF_PROG)
+diff --git a/src/mesa/drivers/dri/i965/brw_state_upload.c b/src/mesa/drivers/dri/i965/brw_state_upload.c
+index 1c53e5b..d0b4674 100644
+--- a/src/mesa/drivers/dri/i965/brw_state_upload.c
++++ b/src/mesa/drivers/dri/i965/brw_state_upload.c
+@@ -529,6 +529,7 @@ static struct dirty_bit_map cache_bits[] = {
+    DEFINE_BIT(CACHE_NEW_CC_UNIT),
+    DEFINE_BIT(CACHE_NEW_WM_PROG),
+    DEFINE_BIT(CACHE_NEW_BLORP_BLIT_PROG),
++   DEFINE_BIT(CACHE_NEW_BLORP_CONST_COLOR_PROG),
+    DEFINE_BIT(CACHE_NEW_SAMPLER),
+    DEFINE_BIT(CACHE_NEW_WM_UNIT),
+    DEFINE_BIT(CACHE_NEW_SF_PROG),
+--
+1.9.1
